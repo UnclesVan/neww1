@@ -7,23 +7,21 @@ local TeleportSpeed -- Placeholder, will be populated from UI elements or script
 
 -- Check if the Fluent UI is already loaded (assuming Fluent is a global or a service)
 if _G.FluentLoaded then  -- Use a global flag
-    -- Fluent UI already exists, just create the floating button.
+    -- Fluent UI already exists, just create the necessary UI elements
     Fluent = _G.Fluent -- Use the existing instance
     SaveManager = _G.SaveManager
     InterfaceManager = _G.InterfaceManager
     Window = _G.FluentWindow  -- Assuming you store the window as a global.
-    floatingButton = createFloatingButton()
-    floatingButton.Visible = true -- Make sure it is visible.
 
-    --Re-establish the connections.
+    -- Re-establish the connections.
     if Window.Minimized and typeof(Window.Minimized.Connect) == 'function' then
         Window.Minimized:Connect(function()
-            floatingButton.Visible = true
+            -- Handle minimization (no floating button needed now)
         end)
     end
     if Window.Unminimized and typeof(Window.Unminimized.Connect) == 'function' then
         Window.Unminimized:Connect(function()
-            floatingButton.Visible = false
+            -- Handle unminimization (no floating button needed now)
         end)
     end
 
@@ -49,7 +47,7 @@ else
     })
     _G.FluentWindow = Window
 
-    --Fluent provides Lucide Icons https://lucide.dev/icons/ for the tabs, icons are optional
+    -- Fluent provides Lucide Icons https://lucide.dev/icons/ for the tabs, icons are optional
     local Tabs = {
         Main = Window:AddTab({ Title = "Main", Icon = "" }),
         Settings = Window:AddTab({ Title = "Settings", Icon = "settings" }),
@@ -213,55 +211,8 @@ else
         end
     end)
 
-    -- Autohide functionality is removed or modified. No autohide toggle
-
-    -- Create a floating button
-    local function createFloatingButton()
-        local buttonSize = UDim2.new(0, 40, 0, 40) -- Size of the button
-        local button = Instance.new("ImageButton") -- Changed to ImageButton
-        button.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-        button.Size = buttonSize
-        button.Position = UDim2.new(0.5, -20, 0, 50) -- Position in the middle top (adjust offset as needed)
-        button.AnchorPoint = Vector2.new(0.5, 0) -- Set the anchor point to the center top
-        button.Active = true
-        button.Visible = true -- Initially shown
-        button.Size = buttonSize
-        button.Image = "rbxasset://textures/ui/LuaIcon.png"  -- Example:  Use an icon that represents your UI.
-        button.ImageTransparency = 0.2
-        button.ImageColor3 = Color3.new(1, 1, 1) -- Set the ImageColor3
-        button.BorderSizePixel = 0 --remove border
-
-        local corner = Instance.new("UICorner")  -- Create a UICorner
-        corner.CornerRadius = UDim.new(0.5, 0)   -- Set the corner radius
-        corner.Parent = button                 -- Parent it to the ImageButton
-
-        -- Handle button click to show the UI
-        button.MouseButton1Down:Connect(function()
-            if Window:IsVisible() then
-                Window:SetVisible(false)
-            else
-                Window:SetVisible(true)
-            end
-        end)
-
-        return button
-    end
-
-    floatingButton = createFloatingButton()
-
-    -- Listen to the minimized event
-    -- Ensure Window.Minimized and Window.Unminimized exist and are valid connections.
-    -- Show button on minimize, hide on unminimize
-    if Window.Minimized and typeof(Window.Minimized.Connect) == 'function' then
-        Window.Minimized:Connect(function()
-            floatingButton.Visible = true
-        end)
-    end
-    if Window.Unminimized and typeof(Window.Unminimized.Connect) == 'function' then
-        Window.Unminimized:Connect(function()
-            floatingButton.Visible = false
-        end)
-    end
+    -- Create the UI
+    -- You can still interact with the Fluent UI and tabs here without needing the floating button
 
     -- Addons:
     -- SaveManager (Allows you to have a configuration system)
